@@ -712,14 +712,14 @@ class IzinController extends Controller
             }
     
             $findPengaju = User::find($getRecord->idUser);
-            if($role === 2){
+            if($role == 2){
                 $findPengaju['link'] = "http://localhost:5173/Detail/".$id;
                 $findPengaju['perespon'] = "Guru";
                 $findPengaju['respon'] = "Ditolak";
     
                 $getRecord->responGuruPengajar = "Ditolak";    
     
-            }else if($role === 5){
+            }else if($role == 5){
                 $findPengaju['link'] = "http://localhost:5173/Detail/".$id;
                 $findPengaju['perespon'] = "Kurikulum";
                 $findPengaju['respon'] = "Ditolak";
@@ -727,12 +727,14 @@ class IzinController extends Controller
                 $getRecord->responKurikulum = "Ditolak";
             }
             $getRecord->statusPengajuan = "Ditolak";  
+
     
             Mail::mailer('smtp')->to($findPengaju->email)->send(new RespondNotification($findPengaju));
     
             $getRecord->save();
             return response()->json([
-                'message'=> "Data berhasil diupdate"
+                'message'=> "Data berhasil diupdate",
+                'role' => $role,
             ],200);
         } catch(\Exception $e){
             return response()->json([
